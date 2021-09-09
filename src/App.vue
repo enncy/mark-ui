@@ -1,31 +1,24 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import { onMounted, ref } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import MdRender from "@/components/MdRender.vue";
-
-// 自动滚动
-function autoScroll(e: any) {
-  const mdRender: any = document.querySelector(".markdown-body");
-  // 计算有效高
-  var validH = e?.target?.scrollHeight - e.target.clientHeight;
-  const rate = e?.target?.scrollTop / validH;
-  console.log(rate);
-  console.log(mdRender.scrollHeight * rate);
-
-  mdRender?.scrollTo({
-    behavior: "auto",
-    top: mdRender.scrollHeight * rate,
-  });
-}
+import MdEditor from "./components/MdEditor.vue";
+import hljs from "highlight.js";
+import MdCssSelector from "./components/MdCssSelector.vue";
 
 const content = ref("");
+
+function onFileUpdate(files: File[]) {
+  console.log(files);
+}
 </script>
 
 <template>
-  <div style="display: flex; ">
-    <textarea v-model="content" @scroll="autoScroll"></textarea>
-    <md-render :content="content" />
+  <div style="display: flex">
+    <md-css-selector />
+    <md-editor v-model="content" @files-update="onFileUpdate" :render-keys="['1']" />
+    <md-render :content="content" key="1" />
   </div>
 </template>
 

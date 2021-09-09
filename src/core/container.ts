@@ -16,9 +16,6 @@ export default function (md: MarkdownIt) {
             }
         }
     })
- 
-
-
 
     // 创建全局通用容器
     createCommonContainer(md, CommonContainerNames.INFO)
@@ -39,9 +36,9 @@ export function createCommonContainer(md: MarkdownIt, name: string | CommonConta
             open(tokens: Token[], idx: number) {
                 var m = tokens[idx].info.trim().match(RegExp(`^${name}\\s+(.*)$`));
                 return `
-                                <div class='container-${name}'>
-                                    <p class='container-title'>${m?.[1] || ''}</p>
-                                    <div class='container-body'>
+                        <div class='container-${name}'>
+                            <p class='container-title'>${m?.[1] || ''}</p>
+                        <div class='container-body'>
                             `
             },
             close() {

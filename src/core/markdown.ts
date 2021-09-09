@@ -1,10 +1,10 @@
 import hljs from "highlight.js";
 import Emoji from "markdown-it-emoji";
-import Container from "./enncy-container";
+import Container from "@/core/container";
 import Anchor from "markdown-it-anchor";
 import TocDoneRight from "markdown-it-toc-done-right";
 import MarkdownIt from "markdown-it";
-
+ 
 
 // 初始化 markdown
 const markdown: MarkdownIt = MarkdownIt({
