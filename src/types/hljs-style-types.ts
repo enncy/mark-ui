@@ -1,5 +1,5 @@
- 
-export interface HljsCssTypes {
+
+export interface HljsStyleTypes {
 
 
     "base16/3024": string

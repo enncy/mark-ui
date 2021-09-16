@@ -17,6 +17,7 @@ export default function (md: MarkdownIt) {
         }
     })
 
+
     // 创建全局通用容器
     createCommonContainer(md, CommonContainerNames.INFO)
     createCommonContainer(md, CommonContainerNames.WARNING)
