@@ -1,8 +1,7 @@
 {
   "name": "mark-ui",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
- 
   "main": "./lib/mark-ui.umc.js",
   "types": "./lib/mark-ui.es.js",
   "scripts": {
