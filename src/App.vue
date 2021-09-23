@@ -1,4 +1,5 @@
 <template>
+ 
     <div class="container">
         <md-editor
             class="editor"
@@ -19,7 +20,7 @@ import MdRender from "@/components/MdRender.vue";
 import MdEditor from "./components/MdEditor.vue";
 import HljsStyleEnums from "./types/hljs-style-enum";
 import { autoChangeStyle } from "./utils/render";
-
+ 
 const content = ref("");
 const style = ref(HljsStyleEnums["github-dark"]);
 

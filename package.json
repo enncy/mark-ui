@@ -1,7 +1,8 @@
 {
   "name": "mark-ui",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "files": ["./lib"],
   "scripts": {
     "test": "ts-node ./test/index.ts",
     "dev": " vite",

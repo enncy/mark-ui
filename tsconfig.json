@@ -16,5 +16,5 @@
       "@/*":["./*"]
     }
   },
-  "include": ["./css-generator.ts","src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": ["./css-generator.ts","./index.ts","src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "./**/*.vue"]
 }
