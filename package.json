@@ -2,8 +2,11 @@
   "name": "mark-ui",
   "version": "1.0.6",
   "type": "module",
-  "main": "./lib/mark-ui.umd.js",
+  "main": "./lib/mark-ui.es.js",
   "types": "./lib/mark-ui.es.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "ts-node ./test/index.ts",
     "dev": " vite",

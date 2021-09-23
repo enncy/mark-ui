@@ -1,4 +1,4 @@
-import hljs from "highlight.js";
+import hljs from "highlight.js/lib/core";
 import Emoji from "markdown-it-emoji";
 import Container from "@/core/plugins/container";
 import Anchor from "markdown-it-anchor";
@@ -22,7 +22,7 @@ const markdown: MarkdownIt = MarkdownIt({
     // 高亮
     highlight: function (str, lang, attrs) {
 
-
+        
         if (lang && hljs.getLanguage(lang)) {
             try {
                 const value = hljs.highlight(lang, str, true).value;
