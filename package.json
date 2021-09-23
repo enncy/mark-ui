@@ -3,11 +3,10 @@
   "version": "1.0.2",
   "type": "module",
   "files": [
-    "./lib",
-    "./dist"
+    "./lib"
   ],
-  "main": "./dist/mark-ui.umc.js",
-  "types": "./dist/mark-ui.es.js",
+  "main": "./lib/mark-ui.umc.js",
+  "types": "./lib/mark-ui.es.js",
   "scripts": {
     "test": "ts-node ./test/index.ts",
     "dev": " vite",
