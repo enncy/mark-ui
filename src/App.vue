@@ -86,7 +86,5 @@ function onStyleChange(_style: HljsStyleEnums) {
         max-width: 100%;
     }
 }
-
-.selector {
-}
+ 
 </style>
