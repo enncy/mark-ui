@@ -3,7 +3,8 @@
   "version": "1.0.1",
   "type": "module",
   "files": [
-    "./lib"
+    "./lib",
+    "./dist"
   ],
   "main": "./dist/mark-ui.umc.js",
   "types": "./dist/mark-ui.es.js",
