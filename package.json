@@ -1,6 +1,6 @@
 {
   "name": "mark-ui",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "main": "./lib/mark-ui.es.js",
   "types": "./lib/mark-ui.es.js",
