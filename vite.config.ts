@@ -10,7 +10,7 @@ export default defineConfig({
     lib: {
       entry: './index.ts',
       name: 'MarkUI',
-      formats: ["umd"]
+      formats: ["cjs",'es','umd']
     },
     // minify: false,
     rollupOptions: {
@@ -18,7 +18,7 @@ export default defineConfig({
         return /node_modules/.test(source) || ['vue'].includes(source)
       },
       output: {
-        dir:'./dist/umd',
+        // dir:'./dist',
         // name:'MarkUI',
         // file:'mark-ui.js',
         // assetFileNames: 'assets/[name][extname]',

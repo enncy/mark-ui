@@ -1,6 +1,6 @@
 import { App } from 'vue';
 import { MdStyleSelector, MdRender, MdEditor } from './src/main';
-
+export { MdStyleSelector, MdRender, MdEditor }
 
 export default function MarkUI(app: App, ...options: any[]): void {
     app.component('MdStyleSelector', MdStyleSelector)
