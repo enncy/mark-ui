@@ -1,6 +1,6 @@
 {
   "name": "mark-ui",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "type": "module",
   "main": "./dist/esm/mark-ui.esm.js",
   "types": "./lib/index.d.ts",
