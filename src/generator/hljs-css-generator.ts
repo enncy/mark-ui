@@ -2,7 +2,7 @@ import { HljsStyleTypes } from '../types/hljs-style-types';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
-const { defaultVersion, supportSources, styles } = JSON.parse(fs.readFileSync(path.resolve("./lib/generator/hljs-css.json")).toString())
+const { defaultVersion, supportSources, styles } = JSON.parse(fs.readFileSync(path.resolve("./core/generator/hljs-css.json")).toString())
 import chalk from 'chalk';
 import ora from 'ora';
 import _less from 'less';

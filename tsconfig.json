@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+ 
     "target": "esnext",
     "useDefineForClassFields": true,
     "module": "esnext",
@@ -12,10 +13,9 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "outDir": "./lib",
-    "baseUrl": "./src",
-    "paths": {
-      "@/*":["./*"]
-    }
+    "baseUrl": "src",
+    
   },
-  "include": ["./css-generator.ts","./index.ts","src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "./**/*.vue"]
+  "include": ["src/index.ts","src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["./dist"]
 }

@@ -1,0 +1,31 @@
+
+@import './color.less';
+
+.container{
+    .create(info,@primary-color);
+    .create(warning,@warning-color);
+    .create(success,@success-color);
+    .create(error,@error-color);
+
+
+    .create(@name,@color){
+        &-@{name}{
+            border-radius: 2px;
+            border-left: 8px solid @color;
+            background-color: mix(@color,rgba(255,255,255,0.1),10%);
+            padding: 1px 1px 1px 20px;
+        }
+    }
+
+    &-title{
+        line-height: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    &-body {
+        line-height: 20px;
+        font-weight: 300;
+    }
+
+}

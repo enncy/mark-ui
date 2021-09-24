@@ -5,21 +5,23 @@
             class="editor"
             v-model="content"
             @files-update="onFileUpdate"
-            :renderKeys="[1, 2]"
+            :renderKeys="['1']"
         />
 
-        <md-render class="render" :codeStyle="style" :content="content" :renderKey="1" />
+        <md-render class="render" :codeStyle="style" :content="content"  renderKey="1" />
     </div>
 </template>
 
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
+ 
 import { nextTick, ref, watch } from "vue";
-import MdRender from "@/components/MdRender.vue";
-import MdEditor from "./components/MdEditor.vue";
+import MdRender from "./components/MdRender";
+import MdEditor from "./components/MdEditor";
 import HljsStyleEnums from "./types/hljs-style-enum";
 import { autoChangeStyle } from "./utils/render";
+ 
  
 const content = ref("");
 const style = ref(HljsStyleEnums["github-dark"]);
@@ -30,6 +32,8 @@ function onFileUpdate(files: File[]) {
 }
 
 nextTick(() => {
+    console.log(autoChangeStyle);
+    
     autoChangeStyle();
 });
 

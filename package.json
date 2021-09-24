@@ -2,10 +2,11 @@
   "name": "mark-ui",
   "version": "1.0.8",
   "type": "module",
-  "main": "./lib/mark-ui.es.js",
-  "types": "./lib/mark-ui.es.js",
+  "main": "./dist/esm/mark-ui.esm.js",
+  "types": "./lib/index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "dist"
   ],
   "scripts": {
     "test": "ts-node ./test/index.ts",
@@ -15,6 +16,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@vitejs/plugin-vue-jsx": "^1.1.8",
     "highlight.js": "^11.2.0",
     "markdown-it": "^12.2.0",
     "markdown-it-abbr": "^1.0.4",
@@ -40,8 +42,15 @@
     "less": "^4.1.1",
     "less-loader": "^10.0.1",
     "ora": "^6.0.1",
+    "rollup-plugin-dts": "^4.0.0",
+    "rollup-plugin-esbuild": "^4.5.0",
+    "rollup-plugin-visualizer": "^5.5.2",
+    "rollup-plugin-vue": "^6.0.0",
+    "ts-node": "^10.2.1",
     "typescript": "^4.3.2",
     "vite": "^2.5.2",
+    "vite-aliases": "^0.8.6",
+    "vue-dts-gen": "^0.3.0",
     "vue-tsc": "^0.2.2"
   }
 }
