@@ -5443,7 +5443,7 @@ const MdRender = defineComponent({
       "data-render-key": renderKey.value,
       "class": "markdown-body hl-" + codeStyle.value.toString().replace("/", "-"),
       "innerHTML": result.value
-    }, null);
+    }, [createVNode("slot", null, null)]);
   }
 });
 const MdStyleSelector = defineComponent({

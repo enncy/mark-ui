@@ -84,7 +84,9 @@ export const MdRender = defineComponent({
                 data-render-key={renderKey.value}
                 class={'markdown-body hl-' + codeStyle.value.toString().replace('/', '-')}
                 v-html={result.value}
-            ></div>
+            >
+                <slot></slot>
+            </div>
         );
     },
 });

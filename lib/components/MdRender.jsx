@@ -65,7 +65,9 @@ export const MdRender = defineComponent({
                 content_cache = content?.value?.split("\n") || [];
             });
         }
-        return () => (<div data-render-key={renderKey.value} class={'markdown-body hl-' + codeStyle.value.toString().replace('/', '-')} v-html={result.value}></div>);
+        return () => (<div data-render-key={renderKey.value} class={'markdown-body hl-' + codeStyle.value.toString().replace('/', '-')} v-html={result.value}>
+                <slot></slot>
+            </div>);
     },
 });
 export default MdRender;

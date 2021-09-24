@@ -5446,7 +5446,7 @@ const MdRender = vue.defineComponent({
       "data-render-key": renderKey.value,
       "class": "markdown-body hl-" + codeStyle.value.toString().replace("/", "-"),
       "innerHTML": result.value
-    }, null);
+    }, [vue.createVNode("slot", null, null)]);
   }
 });
 const MdStyleSelector = vue.defineComponent({
