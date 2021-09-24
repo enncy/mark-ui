@@ -43,6 +43,62 @@ export function scrollToLine(target: any, change_line: number): boolean {
 }
 
 
+/**
+ * 格式化 \<pre\> 元素中的制表符内容，使得每一行的制表符数量都尽量最小
+ * ****
+ * 例如
+ * ```js
+ * formatPreElementContent(`\t\t\thello word
+ * \t\thi,i am li hua
+ * \thow s going`)
+ * ```
+ * 将返回
+ * ```js
+ * `\t\thello word
+ * \thi,i am li hua
+ * how s going`
+ * ```
+ * 
+ * @param content 
+ */
+export function formatPreElementContent(content: string): string {
+    let res: any = content
+    let tabInfo: any[] = []
+    let min = 0
+
+
+    // 收集每行的制表符数量
+    res = res.split("\n")
+    res.forEach((line: string, i: number) => {
+        if (line.replace(/\s+/g, "") !== "") {
+            tabInfo.push({
+                count: line.match(/^(    |\t)+/g)?.[0].match(/(    |\t)/g)?.length || 0,
+                index: i
+            })
+        }
+    })
+    console.log("tabCount", tabInfo);
+    // 找到最小公共制表符
+
+    min = minCount(tabInfo.map(t => t.count))
+    // 使每一行的开头为最小数量的制表符
+
+    tabInfo.forEach(info => {
+        res[info.index] = "\t".repeat(info.count - min) + res[info.index].replace(/(    |\t)+/g, '')
+    })
+    res = res.join("\n")
+
+
+    function minCount(arr: any[]) {
+        let base = arr[0]
+        for (let i = 1; i < arr.length; i++) {
+            base = Math.min(base, arr[i])
+        }
+        return base
+    }
+
+    return res
+}
 
 
 /**
@@ -52,7 +108,7 @@ export function autoChangeStyle() {
     const selects: HTMLSelectElement[] = Array.from(
         document.querySelectorAll("[" + DATA_SELECTOR_KEY + "]")
     );
-   
+
     if (selects) {
         selects.forEach((select) => {
             // 根据选项修改样式，并且自动适配选项的宽度

@@ -5088,7 +5088,7 @@ const cssKeys = hljsCss.styles;
 let id = 0;
 const hljs = window.hljs;
 const MarkdownIt = window.markdownit;
-const markdown = MarkdownIt({
+const markdown$1 = MarkdownIt({
   html: true,
   breaks: true,
   linkify: true,
@@ -5105,10 +5105,10 @@ const markdown = MarkdownIt({
       } catch (__) {
       }
     }
-    return `<pre class="hljs"><code>${markdown.utils.escapeHtml(str)}</code></pre>`;
+    return `<pre class="hljs"><code>${markdown$1.utils.escapeHtml(str)}</code></pre>`;
   }
 });
-markdown.use(markdownItEmoji).use(Container).use(b, {
+markdown$1.use(markdownItEmoji).use(Container).use(b, {
   permalink: true,
   permalinkBefore: true,
   permalinkSymbol: "#"
@@ -5379,6 +5379,35 @@ function scrollToLine(target, change_line) {
   }
   return false;
 }
+function formatPreElementContent(content) {
+  let res = content;
+  let tabInfo = [];
+  let min = 0;
+  res = res.split("\n");
+  res.forEach((line, i2) => {
+    var _a, _b;
+    if (line.replace(/\s+/g, "") !== "") {
+      tabInfo.push({
+        count: ((_b = (_a = line.match(/^(    |\t)+/g)) == null ? void 0 : _a[0].match(/(    |\t)/g)) == null ? void 0 : _b.length) || 0,
+        index: i2
+      });
+    }
+  });
+  console.log("tabCount", tabInfo);
+  min = minCount(tabInfo.map((t2) => t2.count));
+  tabInfo.forEach((info) => {
+    res[info.index] = "	".repeat(info.count - min) + res[info.index].replace(/(    |\t)+/g, "");
+  });
+  res = res.join("\n");
+  function minCount(arr) {
+    let base = arr[0];
+    for (let i2 = 1; i2 < arr.length; i2++) {
+      base = Math.min(base, arr[i2]);
+    }
+    return base;
+  }
+  return res;
+}
 function getRender(renderKey) {
   const render2 = document.querySelector(renderKey ? `[data-render-key='${renderKey}']` : ".markdown-body");
   return render2;
@@ -5416,21 +5445,29 @@ const MdRender = vue.defineComponent({
       renderKey,
       raw
     } = vue.toRefs(props);
-    let result = vue.ref("");
+    let result = vue.ref(void 0);
+    console.log("raw.value", raw.value);
     if (raw.value) {
-      vue.nextTick(() => {
-        var _a2;
-        const html = ((_a2 = getRender(renderKey.value)) == null ? void 0 : _a2.innerHTML) || "";
-        result.value = markdown.render(html.replace(/\n/g, "<br>") || "");
+      vue.onMounted(() => {
+        vue.nextTick(() => {
+          const render2 = getRender(renderKey.value);
+          let html = (render2 == null ? void 0 : render2.querySelector("pre").innerHTML) || "";
+          console.log(html);
+          html = formatPreElementContent(html);
+          console.log(html);
+          result.value = markdown$1.render(html || "");
+          render2.innerHTML = result.value;
+        });
       });
     } else {
-      result = vue.computed(() => markdown.render((content == null ? void 0 : content.value) || ""));
+      result = vue.computed(() => markdown$1.render((content == null ? void 0 : content.value) || ""));
       let content_cache = ((_a = content.value) == null ? void 0 : _a.split("\n")) || [];
       let temp_line = -1;
       vue.watch(result, async () => {
         var _a2, _b;
         await vue.nextTick();
         const render2 = getRender(renderKey.value);
+        render2.innerHTML = result.value;
         const lines = ((_a2 = content == null ? void 0 : content.value) == null ? void 0 : _a2.split("\n")) || [];
         for (let i2 = 0; i2 < lines.length; i2++) {
           if (lines[i2] != content_cache[i2] && temp_line !== i2) {
@@ -5442,11 +5479,15 @@ const MdRender = vue.defineComponent({
         content_cache = ((_b = content == null ? void 0 : content.value) == null ? void 0 : _b.split("\n")) || [];
       });
     }
-    return () => vue.createVNode("div", {
-      "data-render-key": renderKey.value,
-      "class": "markdown-body hl-" + codeStyle.value.toString().replace("/", "-"),
-      "innerHTML": result.value
-    }, [vue.createVNode("slot", null, null)]);
+    return () => {
+      var _a2;
+      return vue.createVNode("div", {
+        "data-render-key": renderKey.value,
+        "class": "markdown-body hl-" + codeStyle.value.toString().replace("/", "-")
+      }, [raw.value ? (_a2 = slots.default) == null ? void 0 : _a2.call(slots) : vue.createVNode("div", {
+        "innerHTML": result.value
+      }, null)]);
+    };
   }
 });
 const MdStyleSelector = vue.defineComponent({
@@ -5479,6 +5520,7 @@ const MdStyleSelector = vue.defineComponent({
     })]), [[vue.resolveDirective("on-change"), onChange]]);
   }
 });
+var markdown = "/**\r\n    markdown \u6837\u5F0F\r\n*/\r\n.markdown-body {\r\n    /**\r\n          \u4EE5\u4E0B\u662F table \u6837\u5F0F\r\n      */\r\n  }\r\n  .markdown-body img {\r\n    max-width: 100%;\r\n  }\r\n  .markdown-body pre {\r\n    max-width: 100%;\r\n  }\r\n  .markdown-body details {\r\n    border-radius: 2px;\r\n    padding: 30px 0px 30px 20px;\r\n    border-left: 8px solid rgba(0, 0, 0, 0.25);\r\n    background-color: rgba(222, 222, 222, 0.115);\r\n  }\r\n  .markdown-body h1 code,\r\n  .markdown-body h2 code,\r\n  .markdown-body h3 code,\r\n  .markdown-body h4 code,\r\n  .markdown-body h5 code,\r\n  .markdown-body h6 code {\r\n    padding: 0.4rem 0.6rem;\r\n    background-color: #f0f0f0;\r\n    border-radius: 6px;\r\n    font-size: 1.5rem;\r\n    font-weight: bold;\r\n    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;\r\n  }\r\n  .markdown-body h1:hover .header-anchor,\r\n  .markdown-body h2:hover .header-anchor,\r\n  .markdown-body h3:hover .header-anchor,\r\n  .markdown-body h4:hover .header-anchor,\r\n  .markdown-body h5:hover .header-anchor,\r\n  .markdown-body h6:hover .header-anchor {\r\n    text-decoration: none;\r\n    display: inline-block;\r\n  }\r\n  .markdown-body p code,\r\n  .markdown-body a code,\r\n  .markdown-body span code,\r\n  .markdown-body li code {\r\n    padding: 0.1rem 0.4rem;\r\n    color: #c7254e;\r\n    background-color: #f9f2f4;\r\n    border-radius: 4px;\r\n    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;\r\n  }\r\n  .markdown-body pre:not([class]) > code:not([class]) {\r\n    display: block;\r\n    padding: 20px;\r\n    background-color: #f0f0f0;\r\n    font-family: monospace;\r\n    margin: 0px;\r\n    max-width: 100%;\r\n  }\r\n  .markdown-body pre.hljs {\r\n    padding: 20px;\r\n  }\r\n  .markdown-body .markdown-code:hover .line-suffix {\r\n    opacity: 1;\r\n  }\r\n  .markdown-body .markdown-code .line-suffix {\r\n    display: flex;\r\n    width: 100%;\r\n    justify-content: flex-end;\r\n    transform: translate(0, 24px);\r\n    transition: all ease 0.5s;\r\n    opacity: 0;\r\n  }\r\n  .markdown-body .markdown-code .line-suffix select {\r\n    border: unset;\r\n    color: #ffffff;\r\n    background: unset;\r\n  }\r\n  .markdown-body .markdown-code .line-suffix select option {\r\n    text-align: left;\r\n    color: black;\r\n  }\r\n  .markdown-body .markdown-code .line-suffix [class*=code] {\r\n    line-height: 18px;\r\n    color: #ffffff;\r\n    background-color: rgba(0, 0, 0, 0.2);\r\n    padding: 0px 4px;\r\n    margin: 0px 10px 0px 10px;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n    -moz-user-select: none;\r\n    -webkit-user-select: none;\r\n    -ms-user-select: none;\r\n    -khtml-user-select: none;\r\n    user-select: none;\r\n  }\r\n  .markdown-body .markdown-code .block-code code {\r\n    transition: all ease 0.5s;\r\n    padding-top: 10px;\r\n    display: flex;\r\n  }\r\n  .markdown-body .markdown-code .block-code code .line-count {\r\n    margin: 5px;\r\n    padding: 15px;\r\n    color: #9e9e9e;\r\n    border-right: 1px solid #000000;\r\n    -moz-user-select: none;\r\n    -webkit-user-select: none;\r\n    -ms-user-select: none;\r\n    -khtml-user-select: none;\r\n    user-select: none;\r\n  }\r\n  .markdown-body .markdown-code .block-code code .code-render {\r\n    width: 100%;\r\n    padding: 20px;\r\n    padding-bottom: 10px;\r\n    overflow: auto;\r\n    font-family: Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;\r\n  }\r\n  .markdown-body .header-anchor {\r\n    display: none;\r\n  }\r\n  .markdown-body ::selection {\r\n    color: white;\r\n    background-color: #3368f4;\r\n  }\r\n  .markdown-body blockquote {\r\n    border-radius: 2px;\r\n    padding: 4px 0px 4px 20px;\r\n    margin: 0px;\r\n    font-size: 14px;\r\n    color: rgba(0, 0, 0, 0.65);\r\n    border-left: 8px solid rgba(0, 0, 0, 0.25);\r\n    background-color: rgba(222, 222, 222, 0.115);\r\n  }\r\n  .markdown-body table {\r\n    border-spacing: 0px;\r\n    text-indent: unset;\r\n    box-sizing: unset;\r\n    border-collapse: unset;\r\n  }\r\n  .markdown-body table tr th {\r\n    font-weight: 700;\r\n    background-color: #e5e7eb;\r\n  }\r\n  .markdown-body table tr:nth-child(even) {\r\n    background-color: #f5f5f5;\r\n  }\r\n  .markdown-body th,\r\n  .markdown-body td {\r\n    border: 1px solid #ddd;\r\n    padding: 10px;\r\n  }\r\n  .markdown-body hr {\r\n    background: #e8e8e8;\r\n    margin: 24px 0px 24px 0px;\r\n    padding: 0px;\r\n    border: unset;\r\n    height: 1.5px;\r\n  }\r\n  .markdown-body a::selection {\r\n    color: blue;\r\n  }\r\n  .markdown-body a {\r\n    color: #2f9bff;\r\n  }\r\n  .markdown-body ul {\r\n    padding-inline-start: 32px;\r\n  }\r\n  .markdown-body ul li {\r\n    line-height: 26px;\r\n  }\r\n  .markdown-body .toc-li {\r\n    display: block;\r\n  }";
 function MarkUI(app, ...options) {
   app.component("MdStyleSelector", MdStyleSelector);
   app.component("MdRender", MdRender);

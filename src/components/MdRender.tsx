@@ -1,9 +1,9 @@
 import { HljsStyleTypes } from '../types/hljs-style-types';
-import { PropType, defineComponent, toRefs, ref } from 'vue';
+import { PropType, defineComponent, toRefs, ref, onMounted } from 'vue';
 import { computed, watch, nextTick } from "vue";
 import markdown from "../markdown";
 import HljsStyleEnums from "../types/hljs-style-enum";
-import { scrollToLine } from "../utils/render";
+import { formatPreElementContent, scrollToLine } from "../utils/render";
 
 function getRender(renderKey: any) {
     // 当前对象，如果未指定则获取第一个类为 ".markdown-body" 的对象
@@ -35,7 +35,7 @@ export const MdRender = defineComponent({
         },
         raw: {
             type: Boolean,
-            default:false,
+            default: false,
             required: false
         }
     },
@@ -43,13 +43,25 @@ export const MdRender = defineComponent({
 
 
         const { content, codeStyle, renderKey, raw } = toRefs(props)
-        let result = ref("")
-    
+        let result = ref(undefined)
+        console.log("raw.value", raw.value);
+
         if (raw.value) {
-            nextTick(() => {
-                const html = getRender(renderKey.value)?.innerHTML || ''
-                result.value = markdown.render(html.replace(/\n/g, '<br>') || "")
+            onMounted(() => {
+                nextTick(() => {
+                    const render = getRender(renderKey.value)
+
+                    let html: string = render?.querySelector('pre').innerHTML || ''
+                    console.log(html);
+                    html = formatPreElementContent(html)
+                    console.log(html);
+
+
+                    result.value = markdown.render(html || "")
+                    render.innerHTML = result.value
+                })
             })
+
         } else {
             result = computed(() => markdown.render(content?.value || ""));
 
@@ -57,11 +69,12 @@ export const MdRender = defineComponent({
             let content_cache: any[] = content.value?.split("\n") || [];
             // 改动的行数
             let temp_line = -1;
-        
+
             // 监听变化，自动检测当前编辑的高度，并滑动到此高度
-            watch(result, async () => { 
+            watch(result, async () => {
                 await nextTick();
                 const render = getRender(renderKey.value)
+                render.innerHTML = result.value
 
                 const lines = content?.value?.split("\n") || [];
                 for (let i = 0; i < lines.length; i++) {
@@ -83,10 +96,10 @@ export const MdRender = defineComponent({
             <div
                 data-render-key={renderKey.value}
                 class={'markdown-body hl-' + codeStyle.value.toString().replace('/', '-')}
-                v-html={result.value}
             >
-                <slot></slot>
+                {raw.value ? slots.default?.() : <div v-html={result.value}></div>}
             </div>
+
         );
     },
 });

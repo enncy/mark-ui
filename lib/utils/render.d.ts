@@ -6,6 +6,25 @@
  */
 export declare function scrollToLine(target: any, change_line: number): boolean;
 /**
+ * 格式化 \<pre\> 元素中的制表符内容，使得每一行的制表符数量都尽量最小
+ * ****
+ * 例如
+ * ```js
+ * formatPreElementContent(`\t\t\thello word
+ * \t\thi,i am li hua
+ * \thow s going`)
+ * ```
+ * 将返回
+ * ```js
+ * `\t\thello word
+ * \thi,i am li hua
+ * how s going`
+ * ```
+ *
+ * @param content
+ */
+export declare function formatPreElementContent(content: string): string;
+/**
  * 颜色修改
  */
 export declare function autoChangeStyle(): void;

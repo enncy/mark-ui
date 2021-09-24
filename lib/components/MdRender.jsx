@@ -1,8 +1,8 @@
-import { defineComponent, toRefs, ref } from 'vue';
+import { defineComponent, toRefs, ref, onMounted } from 'vue';
 import { computed, watch, nextTick } from "vue";
 import markdown from "../markdown";
 import HljsStyleEnums from "../types/hljs-style-enum";
-import { scrollToLine } from "../utils/render";
+import { formatPreElementContent, scrollToLine } from "../utils/render";
 function getRender(renderKey) {
     // 当前对象，如果未指定则获取第一个类为 ".markdown-body" 的对象
     const render = document.querySelector(renderKey
@@ -35,11 +35,19 @@ export const MdRender = defineComponent({
     },
     setup(props, { slots }) {
         const { content, codeStyle, renderKey, raw } = toRefs(props);
-        let result = ref("");
+        let result = ref(undefined);
+        console.log("raw.value", raw.value);
         if (raw.value) {
-            nextTick(() => {
-                const html = getRender(renderKey.value)?.innerHTML || '';
-                result.value = markdown.render(html.replace(/\n/g, '<br>') || "");
+            onMounted(() => {
+                nextTick(() => {
+                    const render = getRender(renderKey.value);
+                    let html = render?.querySelector('pre').innerHTML || '';
+                    console.log(html);
+                    html = formatPreElementContent(html);
+                    console.log(html);
+                    result.value = markdown.render(html || "");
+                    render.innerHTML = result.value;
+                });
             });
         }
         else {
@@ -52,6 +60,7 @@ export const MdRender = defineComponent({
             watch(result, async () => {
                 await nextTick();
                 const render = getRender(renderKey.value);
+                render.innerHTML = result.value;
                 const lines = content?.value?.split("\n") || [];
                 for (let i = 0; i < lines.length; i++) {
                     // 判断该行是否被改动，以及防抖
@@ -65,8 +74,8 @@ export const MdRender = defineComponent({
                 content_cache = content?.value?.split("\n") || [];
             });
         }
-        return () => (<div data-render-key={renderKey.value} class={'markdown-body hl-' + codeStyle.value.toString().replace('/', '-')} v-html={result.value}>
-                <slot></slot>
+        return () => (<div data-render-key={renderKey.value} class={'markdown-body hl-' + codeStyle.value.toString().replace('/', '-')}>
+                {raw.value ? slots.default?.() : <div v-html={result.value}></div>}
             </div>);
     },
 });
