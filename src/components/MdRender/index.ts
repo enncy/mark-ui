@@ -15,13 +15,21 @@ export function getRender(renderKey: any) {
 }
 
 export function resolveRaw(render: any) {
+     
+    if (render) {
+        let pre: HTMLPreElement = render.querySelector('pre')
+      
+        if (!pre) throw "if you want to use raw to render markdown, you need to use <pre>...</pre> as root element  to include your markdown code!"
+        // 获取 html ， 如果有 pre 子节点，优先获取 pre 的
+        let html: string = pre.innerHTML
 
-    // 获取 html ， 如果有 pre 子节点，优先获取 pre 的
-    let html: string = render?.querySelector('pre').innerHTML || render?.innerHTML
-    // 格式化 html
-    html = formatPreElementContent(html)
+        // 格式化 html
+        html = formatPreElementContent(html)
 
-    return markdown.render(html || "")
+        return markdown.render(html || "")
+    }
+
+    return ""
 }
 
 
@@ -101,7 +109,6 @@ export function formatPreElementContent(content: string): string {
             })
         }
     })
-    console.log("tabCount", tabInfo);
     // 找到最小公共制表符
 
     min = minCount(tabInfo.map(t => t.count))
@@ -111,7 +118,6 @@ export function formatPreElementContent(content: string): string {
         res[info.index] = "\t".repeat(info.count - min) + res[info.index].replace(/(    |\t)+/g, '')
     })
     res = res.join("\n")
-
 
     function minCount(arr: any[]) {
         let base = arr[0]
@@ -151,7 +157,7 @@ export function autoChangeStyle(render: any) {
  * @param render 渲染器dom对象
  * @param copyHandler 回调函数
  */
-export function contentCopy( render: any, copyHandler?: (value: string) => void) {
+export function contentCopy(render: any, copyHandler?: (value: string) => void) {
     const codes = Array.from(render.querySelectorAll('[class*=language]'))
 
     codes.forEach((code: any) => {

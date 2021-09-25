@@ -41,10 +41,15 @@ export const MdRender = defineComponent({
             if (showCodeTool) {
                 toolResolve()
             }
-            renderRaw()
+            nextTick(() => {
+                if (raw.value && render.value) {
+                    const rawMD = resolveRaw(render.value)
+                    result.value = rawMD
+                    render.value.innerHTML = rawMD
+                }
+            })
         })
-        // 在页面DOM更新的时候，同时更新 raw
-        onUpdated(renderRaw)
+
 
         watch(result, () => {
             nextTick(toolResolve)
@@ -57,18 +62,6 @@ export const MdRender = defineComponent({
                 emit('copy', value)
             })
         }
-
-        function renderRaw() {
-            nextTick(() => {
-                if (raw.value && render.value) {
-                    const rawMD = resolveRaw(render.value)
-                    result.value = rawMD
-                    render.value.innerHTML = rawMD
-                }
-            })
-        }
-
-
 
         // 内容缓存
         let content_cache: any[] = content.value?.split("\n") || [];

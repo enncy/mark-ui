@@ -1,4 +1,4 @@
-import { defineComponent, toRefs, createVNode, ref as ref$1, onMounted, onUpdated, watch as watch$1, nextTick } from "vue";
+import { defineComponent, toRefs, createVNode, ref as ref$1, onMounted, nextTick, watch as watch$1 } from "vue";
 function makeMap(str, expectsLowerCase) {
   const map = Object.create(null);
   const list = str.split(",");
@@ -5360,9 +5360,15 @@ var HljsStyleEnums;
 })(HljsStyleEnums || (HljsStyleEnums = {}));
 var HljsStyleEnums$1 = HljsStyleEnums;
 function resolveRaw(render2) {
-  let html = (render2 == null ? void 0 : render2.querySelector("pre").innerHTML) || (render2 == null ? void 0 : render2.innerHTML);
-  html = formatPreElementContent(html);
-  return markdown$1.render(html || "");
+  if (render2) {
+    let pre = render2.querySelector("pre");
+    if (!pre)
+      throw "if you want to use raw to render markdown, you need to use <pre>...</pre> as root element  to include your markdown code!";
+    let html = pre.innerHTML;
+    html = formatPreElementContent(html);
+    return markdown$1.render(html || "");
+  }
+  return "";
 }
 let temp_offsetHeight = -1;
 function scrollToLine(target, change_line) {
@@ -5395,7 +5401,6 @@ function formatPreElementContent(content) {
       });
     }
   });
-  console.log("tabCount", tabInfo);
   min = minCount(tabInfo.map((t2) => t2.count));
   tabInfo.forEach((info) => {
     res[info.index] = "	".repeat(info.count - min) + res[info.index].replace(/(    |\t)+/g, "");
@@ -5487,9 +5492,14 @@ const MdRender = defineComponent({
       if (showCodeTool) {
         toolResolve();
       }
-      renderRaw();
+      nextTick(() => {
+        if (raw.value && render2.value) {
+          const rawMD = resolveRaw(render2.value);
+          result.value = rawMD;
+          render2.value.innerHTML = rawMD;
+        }
+      });
     });
-    onUpdated(renderRaw);
     watch$1(result, () => {
       nextTick(toolResolve);
     });
@@ -5497,15 +5507,6 @@ const MdRender = defineComponent({
       autoChangeStyle(render2.value);
       contentCopy(render2.value, (value) => {
         emit("copy", value);
-      });
-    }
-    function renderRaw() {
-      nextTick(() => {
-        if (raw.value && render2.value) {
-          const rawMD = resolveRaw(render2.value);
-          result.value = rawMD;
-          render2.value.innerHTML = rawMD;
-        }
       });
     }
     let content_cache = ((_a = content.value) == null ? void 0 : _a.split("\n")) || [];
@@ -5541,7 +5542,7 @@ const MdRender = defineComponent({
     };
   }
 });
-var markdown = "/**\n    markdown \u6837\u5F0F\n*/\n.markdown-body {\n  /**\n        \u4EE5\u4E0B\u662F table \u6837\u5F0F\n    */\n}\n.markdown-body img {\n  max-width: 100%;\n}\n.markdown-body pre {\n  max-width: 100%;\n}\n.markdown-body details {\n  border-radius: 2px;\n  padding: 30px 0px 30px 20px;\n  border-left: 8px solid rgba(0, 0, 0, 0.25);\n  background-color: rgba(222, 222, 222, 0.115);\n}\n.markdown-body h1 {\n  font-size: 1.7rem;\n  font-weight: bold;\n}\n.markdown-body h1 code,\n.markdown-body h2 code,\n.markdown-body h3 code,\n.markdown-body h4 code,\n.markdown-body h5 code,\n.markdown-body h6 code {\n  padding: 0.4rem 0.6rem;\n  background-color: #f0f0f0;\n  border-radius: 6px;\n  font-size: 1.5rem;\n  font-weight: bold;\n  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;\n}\n.markdown-body h1:hover .header-anchor,\n.markdown-body h2:hover .header-anchor,\n.markdown-body h3:hover .header-anchor,\n.markdown-body h4:hover .header-anchor,\n.markdown-body h5:hover .header-anchor,\n.markdown-body h6:hover .header-anchor {\n  text-decoration: none;\n  display: inline-block;\n}\n.markdown-body p code,\n.markdown-body a code,\n.markdown-body span code,\n.markdown-body li code {\n  padding: 0.1rem 0.4rem;\n  color: #c7254e;\n  background-color: #f9f2f4;\n  border-radius: 4px;\n  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;\n}\n.markdown-body pre:not([class]) > code:not([class]) {\n  display: block;\n  padding: 20px;\n  background-color: #f0f0f0;\n  font-family: monospace;\n  margin: 0px;\n  max-width: 100%;\n}\n.markdown-body pre.hljs {\n  padding: 20px;\n}\n.markdown-body .markdown-code:hover .line-suffix {\n  opacity: 1;\n}\n.markdown-body .markdown-code .line-suffix {\n  overflow: hidden;\n  display: flex;\n  width: 100%;\n  justify-content: flex-end;\n  transform: translate(0, 24px);\n  transition: all ease 0.5s;\n  opacity: 0;\n}\n.markdown-body .markdown-code .line-suffix select {\n  border: unset;\n  color: #ffffff;\n  background: unset;\n}\n.markdown-body .markdown-code .line-suffix select option {\n  text-align: left;\n  color: black;\n}\n.markdown-body .markdown-code .line-suffix [class*=code] {\n  line-height: 18px;\n  color: #ffffff;\n  background-color: rgba(0, 0, 0, 0.2);\n  padding: 2px 4px;\n  margin: 0px 10px 0px 10px;\n  border-radius: 4px;\n  cursor: pointer;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  -khtml-user-select: none;\n  user-select: none;\n}\n.markdown-body .markdown-code .block-code code {\n  transition: all ease 0.5s;\n  padding-top: 10px;\n  display: flex;\n}\n.markdown-body .markdown-code .block-code code .line-count {\n  margin: 5px;\n  padding: 15px;\n  color: #9e9e9e;\n  border-right: 1px solid #000000;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  -khtml-user-select: none;\n  user-select: none;\n}\n.markdown-body .markdown-code .block-code code .code-render {\n  width: 100%;\n  padding: 20px;\n  padding-bottom: 10px;\n  overflow: auto;\n  font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;\n}\n.markdown-body .header-anchor {\n  display: none;\n}\n.markdown-body ::selection {\n  color: white;\n  background-color: #3368f4;\n}\n.markdown-body blockquote {\n  border-radius: 2px;\n  padding: 4px 0px 4px 20px;\n  margin: 0px;\n  font-size: 14px;\n  color: rgba(0, 0, 0, 0.65);\n  border-left: 8px solid rgba(0, 0, 0, 0.25);\n  background-color: rgba(222, 222, 222, 0.115);\n}\n.markdown-body table {\n  border-spacing: 0px;\n  text-indent: unset;\n  box-sizing: unset;\n  border-collapse: unset;\n}\n.markdown-body table tr th {\n  font-weight: 700;\n  background-color: #e5e7eb;\n}\n.markdown-body table tr:nth-child(even) {\n  background-color: #f5f5f5;\n}\n.markdown-body th,\n.markdown-body td {\n  border: 1px solid #ddd;\n  padding: 10px;\n}\n.markdown-body hr {\n  background: #e8e8e8;\n  margin: 24px 0px 24px 0px;\n  padding: 0px;\n  border: unset;\n  height: 1.5px;\n}\n.markdown-body a::selection {\n  color: blue;\n}\n.markdown-body a {\n  color: #2f9bff;\n}\n.markdown-body ul {\n  padding-inline-start: 32px;\n}\n.markdown-body ul li {\n  line-height: 26px;\n}\n.markdown-body .toc-li {\n  display: block;\n}\n.none-select {\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  -khtml-user-select: none;\n  user-select: none;\n}\n";
+var markdown = ".container-info {\n  border-radius: 2px;\n  border-left: 8px solid #1890ff;\n  background-color: rgba(98, 180, 255, 0.19);\n  padding: 1px 1px 1px 20px;\n}\n.container-warning {\n  border-radius: 2px;\n  border-left: 8px solid #faad14;\n  background-color: rgba(252, 199, 96, 0.19);\n  padding: 1px 1px 1px 20px;\n}\n.container-success {\n  border-radius: 2px;\n  border-left: 8px solid #52c41a;\n  background-color: rgba(138, 215, 100, 0.19);\n  padding: 1px 1px 1px 20px;\n}\n.container-error {\n  border-radius: 2px;\n  border-left: 8px solid #f5222d;\n  background-color: rgba(248, 105, 113, 0.19);\n  padding: 1px 1px 1px 20px;\n}\n.container-title {\n  line-height: 20px;\n  font-size: 20px;\n  font-weight: bold;\n}\n.container-body {\n  line-height: 20px;\n  font-weight: 300;\n}\n/**\n    markdown \u6837\u5F0F\n*/\n.markdown-body {\n  /**\n        \u4EE5\u4E0B\u662F table \u6837\u5F0F\n    */\n}\n.markdown-body img {\n  max-width: 100%;\n}\n.markdown-body pre {\n  max-width: 100%;\n}\n.markdown-body details {\n  border-radius: 2px;\n  padding: 30px 0px 30px 20px;\n  border-left: 8px solid rgba(0, 0, 0, 0.25);\n  background-color: rgba(222, 222, 222, 0.115);\n}\n.markdown-body h1 {\n  font-size: 1.7rem;\n  font-weight: bold;\n}\n.markdown-body h1 code,\n.markdown-body h2 code,\n.markdown-body h3 code,\n.markdown-body h4 code,\n.markdown-body h5 code,\n.markdown-body h6 code {\n  padding: 0.4rem 0.6rem;\n  background-color: #f0f0f0;\n  border-radius: 6px;\n  font-size: 1.5rem;\n  font-weight: bold;\n  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;\n}\n.markdown-body h1:hover .header-anchor,\n.markdown-body h2:hover .header-anchor,\n.markdown-body h3:hover .header-anchor,\n.markdown-body h4:hover .header-anchor,\n.markdown-body h5:hover .header-anchor,\n.markdown-body h6:hover .header-anchor {\n  text-decoration: none;\n  display: inline-block;\n}\n.markdown-body p code,\n.markdown-body a code,\n.markdown-body span code,\n.markdown-body li code {\n  padding: 0.1rem 0.4rem;\n  color: #c7254e;\n  background-color: #f9f2f4;\n  border-radius: 4px;\n  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;\n}\n.markdown-body pre:not([class]) > code:not([class]) {\n  display: block;\n  padding: 20px;\n  background-color: #f0f0f0;\n  font-family: monospace;\n  margin: 0px;\n  max-width: 100%;\n}\n.markdown-body pre.hljs {\n  padding: 20px;\n}\n.markdown-body .markdown-code:hover .line-suffix {\n  opacity: 1;\n}\n.markdown-body .markdown-code .line-suffix {\n  overflow: hidden;\n  display: flex;\n  width: 100%;\n  justify-content: flex-end;\n  transform: translate(0, 24px);\n  transition: all ease 0.5s;\n  opacity: 0;\n}\n.markdown-body .markdown-code .line-suffix select {\n  border: unset;\n  color: #ffffff;\n  background: unset;\n}\n.markdown-body .markdown-code .line-suffix select option {\n  text-align: left;\n  color: black;\n}\n.markdown-body .markdown-code .line-suffix [class*=code] {\n  line-height: 18px;\n  color: #ffffff;\n  background-color: rgba(0, 0, 0, 0.2);\n  padding: 2px 4px;\n  margin: 0px 10px 0px 10px;\n  border-radius: 4px;\n  cursor: pointer;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  -khtml-user-select: none;\n  user-select: none;\n}\n.markdown-body .markdown-code .block-code code {\n  transition: all ease 0.5s;\n  padding-top: 10px;\n  display: flex;\n}\n.markdown-body .markdown-code .block-code code .line-count {\n  margin: 5px;\n  padding: 15px;\n  color: #9e9e9e;\n  border-right: 1px solid #000000;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  -khtml-user-select: none;\n  user-select: none;\n}\n.markdown-body .markdown-code .block-code code .code-render {\n  width: 100%;\n  padding: 20px;\n  padding-bottom: 10px;\n  overflow: auto;\n  font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;\n}\n.markdown-body .header-anchor {\n  display: none;\n}\n.markdown-body ::selection {\n  color: white;\n  background-color: #3368f4;\n}\n.markdown-body blockquote {\n  border-radius: 2px;\n  padding: 4px 0px 4px 20px;\n  margin: 0px;\n  font-size: 14px;\n  color: rgba(0, 0, 0, 0.65);\n  border-left: 8px solid rgba(0, 0, 0, 0.25);\n  background-color: rgba(222, 222, 222, 0.115);\n}\n.markdown-body table {\n  border-spacing: 0px;\n  text-indent: unset;\n  box-sizing: unset;\n  border-collapse: unset;\n}\n.markdown-body table tr th {\n  font-weight: 700;\n  background-color: #e5e7eb;\n}\n.markdown-body table tr:nth-child(even) {\n  background-color: #f5f5f5;\n}\n.markdown-body th,\n.markdown-body td {\n  border: 1px solid #ddd;\n  padding: 10px;\n}\n.markdown-body hr {\n  background: #e8e8e8;\n  margin: 24px 0px 24px 0px;\n  padding: 0px;\n  border: unset;\n  height: 1.5px;\n}\n.markdown-body a::selection {\n  color: blue;\n}\n.markdown-body a {\n  color: #2f9bff;\n}\n.markdown-body ul {\n  padding-inline-start: 32px;\n}\n.markdown-body ul li {\n  line-height: 26px;\n}\n.markdown-body .toc-li {\n  display: block;\n}\n.none-select {\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  -khtml-user-select: none;\n  user-select: none;\n}\n";
 function MarkUI(app, ...options) {
   app.component("MdRender", MdRender);
   app.component("MdEditor", MdEditor);
