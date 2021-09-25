@@ -46,6 +46,8 @@ export const MdRender = defineComponent({
                     const rawMD = resolveRaw(render.value)
                     result.value = rawMD
                     render.value.innerHTML = rawMD
+                }else{
+                    result.value = markdown.render(content?.value || "")
                 }
             })
         })

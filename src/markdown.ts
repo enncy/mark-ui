@@ -75,6 +75,7 @@ markdown
     // 锚点
     .use(Anchor, {
         permalink: true,
+        
         permalinkBefore: true,
         // 锚点标识
         permalinkSymbol: "#",

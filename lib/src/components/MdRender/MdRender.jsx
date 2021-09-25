@@ -42,6 +42,9 @@ export const MdRender = defineComponent({
                     result.value = rawMD;
                     render.value.innerHTML = rawMD;
                 }
+                else {
+                    result.value = markdown.render(content?.value || "");
+                }
             });
         });
         watch(result, () => {

@@ -5500,6 +5500,8 @@ const MdRender = vue.defineComponent({
           const rawMD = resolveRaw(render2.value);
           result.value = rawMD;
           render2.value.innerHTML = rawMD;
+        } else {
+          result.value = markdown$1.render((content == null ? void 0 : content.value) || "");
         }
       });
     });
