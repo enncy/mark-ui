@@ -23,6 +23,11 @@
         background-color: mix(@disabled-color, rgba(255, 255, 255, 0.1), 10%);
     }
 
+    h1 {
+        font-size: 1.7rem;
+        font-weight: bold;
+    }
+
     // 标题中的 inline code
     h1,
     h2,
@@ -87,7 +92,7 @@
         // 块级代码的顶部前缀区域
         .line-suffix {
             overflow: hidden;
-            
+
             display: flex;
             width: 100%;
             justify-content: flex-end;
@@ -235,4 +240,12 @@
     }
 
 
+}
+
+.none-select {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }

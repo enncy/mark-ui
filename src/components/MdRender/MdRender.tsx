@@ -1,5 +1,5 @@
 import { HljsStyleTypes } from '../../types/hljs-style-types';
-import { PropType, defineComponent, toRefs, ref, onMounted } from 'vue';
+import { PropType, defineComponent, toRefs, ref, onMounted, onUpdated } from 'vue';
 import { computed, watch, nextTick } from "vue";
 import markdown from "../../markdown";
 import HljsStyleEnums from "../../types/hljs-style-enum";
@@ -41,15 +41,10 @@ export const MdRender = defineComponent({
             if (showCodeTool) {
                 toolResolve()
             }
-            nextTick(() => {
-                if (raw.value && render.value) {
-                    const rawMD = resolveRaw(render.value)
-                    result.value = rawMD
-                    render.value.innerHTML = rawMD
-                }
-            })
-
+            renderRaw()
         })
+        // 在页面DOM更新的时候，同时更新 raw
+        onUpdated(renderRaw)
 
         watch(result, () => {
             nextTick(toolResolve)
@@ -60,6 +55,16 @@ export const MdRender = defineComponent({
             autoChangeStyle(render.value);
             contentCopy(render.value, (value) => {
                 emit('copy', value)
+            })
+        }
+
+        function renderRaw() {
+            nextTick(() => {
+                if (raw.value && render.value) {
+                    const rawMD = resolveRaw(render.value)
+                    result.value = rawMD
+                    render.value.innerHTML = rawMD
+                }
             })
         }
 

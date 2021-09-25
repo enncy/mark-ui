@@ -3,7 +3,7 @@ import MdEditor from './components/MdEditor/MdEditor';
 import MdRender from './components/MdRender/MdRender';
  
 
-import './assets/css/markdown.css';
+import './assets/less/markdown.less';
 
 import HljsStyleEnums from './types/hljs-style-enum';
 
