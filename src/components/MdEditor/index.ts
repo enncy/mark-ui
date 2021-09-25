@@ -5,7 +5,7 @@
  * 解决 textarea 文本域制表符 为 默认切换元素问题
  * @param e 
  */
-export function resolveTabKeyDown(e: any) {
+ export function resolveTabKeyDown(e: any) {
     if (e.code === "Tab" || e.key === "Tab" || e.keyCode === 9) {
         e.preventDefault();
 

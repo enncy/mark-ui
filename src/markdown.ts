@@ -7,7 +7,7 @@ import Container from "./plugins/container";
 import Anchor from "markdown-it-anchor";
 import TocDoneRight from "markdown-it-toc-done-right";
 
-import hljsCss from "./generator/hljs-css.json";
+import hljsCss from "../generator/hljs-css.json";
 import ShowLine from "./plugins/show.line";
 import { DATA_CODE_KEY, DATA_SELECTOR_KEY } from "./types/dom-attributes-data-set";
 const cssKeys: string[] = hljsCss.styles;

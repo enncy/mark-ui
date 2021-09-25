@@ -1,4 +1,4 @@
-import { HljsStyleTypes } from '../types/hljs-style-types';
+import { HljsStyleTypes } from '../src/types/hljs-style-types';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';

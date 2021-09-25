@@ -1,8 +1,8 @@
 import { PropType, defineComponent, toRefs } from 'vue';
 
 import { ref } from "@vue/reactivity";
-import { resolveFiesUpdate, resolveTabKeyDown } from "../utils/editor";
-
+import { resolveFiesUpdate, resolveTabKeyDown } from '.';
+ 
 
 
 

@@ -1,5 +1,29 @@
-import { DATA_CODE_KEY, DATA_LINE_START } from '../types/dom-attributes-data-set';
-import { DATA_SELECTOR_KEY } from "../types/dom-attributes-data-set";
+import { nextTick } from '@vue/runtime-core';
+import markdown from '../../markdown';
+import { DATA_CODE_KEY, DATA_LINE_START } from '../../types/dom-attributes-data-set';
+import { DATA_SELECTOR_KEY } from "../../types/dom-attributes-data-set";
+
+export function getRender(renderKey: any) {
+    // 当前对象，如果未指定则获取第一个类为 ".markdown-body" 的对象
+    const render: any = document.querySelector(
+        renderKey
+            ? `[data-render-key='${renderKey}']`
+            : ".markdown-body"
+    );
+
+    return render;
+}
+
+export function resolveRaw(render: any) {
+
+    // 获取 html ， 如果有 pre 子节点，优先获取 pre 的
+    let html: string = render?.querySelector('pre').innerHTML || render?.innerHTML
+    // 格式化 html
+    html = formatPreElementContent(html)
+
+    return markdown.render(html || "")
+}
+
 
 
 // 高度变量的缓存
@@ -104,20 +128,35 @@ export function formatPreElementContent(content: string): string {
 /**
  * 颜色修改
  */
-export function autoChangeStyle() {
+export function autoChangeStyle(render: any) {
+
     const selects: HTMLSelectElement[] = Array.from(
-        document.querySelectorAll("[" + DATA_SELECTOR_KEY + "]")
+        render.querySelectorAll("[" + DATA_SELECTOR_KEY + "]")
     );
 
-    if (selects) {
+    if (selects.length !== 0) {
         selects.forEach((select) => {
+            select.style.width = select.value.length * 6 + 40 + "px";
             // 根据选项修改样式，并且自动适配选项的宽度
             select.onchange = function (e) {
-                select.style.width = select.value.length * 6 + 50 + "px";
+                select.style.width = select.value.length * 6 + 40 + "px";
                 changeStyle(select);
             };
         });
     }
+}
+
+export function contentCopy(content: string, render: any, copyHandler?: (value:string) => void) {
+    const codes = Array.from(render.querySelectorAll('[class*=language]'))
+
+    codes.forEach((code: any) => {
+        const codeRender: HTMLDivElement = code.querySelector(".code-render")
+        const copyEl: HTMLSpanElement = code.querySelector(".code-copy")
+        copyEl.onclick = function () {
+            navigator.clipboard.writeText(codeRender.innerText)
+            copyHandler?.(codeRender.innerText)
+        }
+    })
 }
 
 /**

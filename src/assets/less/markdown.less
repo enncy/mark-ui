@@ -10,10 +10,11 @@
         max-width: 100%;
     }
 
-    pre{
+    pre {
         max-width: 100%;
+
     }
- 
+
 
     details {
         border-radius: 2px;
@@ -39,7 +40,7 @@
         }
 
         &:hover .header-anchor {
-            text-decoration:none;
+            text-decoration: none;
             display: inline-block;
         }
     }
@@ -74,7 +75,7 @@
     // Block code
     pre.hljs {
         padding: 20px;
-        
+
     }
 
     // Block code   快级代码
@@ -85,7 +86,8 @@
 
         // 块级代码的顶部前缀区域
         .line-suffix {
-             
+            overflow: hidden;
+            
             display: flex;
             width: 100%;
             justify-content: flex-end;
@@ -108,13 +110,13 @@
                 }
 
             }
- 
+
             // 每个顶部工具的样式，必须包括code
             [class*=code] {
                 line-height: 18px;
                 color: #ffffff;
                 background-color: rgba(0, 0, 0, 0.2);
-                padding: 0px 4px;
+                padding: 2px 4px;
                 margin: 0px 10px 0px 10px;
                 border-radius: 4px;
                 cursor: pointer;
@@ -145,7 +147,7 @@
                     padding: 20px;
                     padding-bottom: 10px;
                     overflow: auto;
-                    font-family: Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;
+                    font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
                 }
             }
         }
