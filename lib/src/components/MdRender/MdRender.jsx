@@ -20,15 +20,22 @@ export const MdRender = defineComponent({
             type: Boolean,
             default: false,
             required: false
+        },
+        showCodeTool: {
+            type: Boolean,
+            default: true,
+            required: false
         }
     },
     emits: ['copy'],
     setup(props, { slots, emit }) {
-        const { content, codeStyle, raw } = toRefs(props);
+        const { content, codeStyle, raw, showCodeTool } = toRefs(props);
         let result = ref("");
         let render = ref(null);
         onMounted(() => {
-            toolResolve();
+            if (showCodeTool) {
+                toolResolve();
+            }
             nextTick(() => {
                 if (raw.value && render.value) {
                     const rawMD = resolveRaw(render.value);
@@ -40,9 +47,10 @@ export const MdRender = defineComponent({
         watch(result, () => {
             nextTick(toolResolve);
         });
+        // 显示代码的悬浮窗工具
         function toolResolve() {
             autoChangeStyle(render.value);
-            contentCopy(content.value, render.value, (value) => {
+            contentCopy(render.value, (value) => {
                 emit('copy', value);
             });
         }

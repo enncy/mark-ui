@@ -30,7 +30,12 @@ export declare function formatPreElementContent(content: string): string;
  * 颜色修改
  */
 export declare function autoChangeStyle(render: any): void;
-export declare function contentCopy(content: string, render: any, copyHandler?: (value: string) => void): void;
+/**
+ * 处理<code/>代码的悬浮窗复制工具
+ * @param render 渲染器dom对象
+ * @param copyHandler 回调函数
+ */
+export declare function contentCopy(render: any, copyHandler?: (value: string) => void): void;
 /**
  * 更改颜色 data-selector-key 和 data-code-key 绑定 2个的值是互相相同且唯一的
  * @param select HTMLSelectElement

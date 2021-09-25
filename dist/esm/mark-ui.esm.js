@@ -5422,15 +5422,17 @@ function autoChangeStyle(render2) {
     });
   }
 }
-function contentCopy(content, render2, copyHandler) {
+function contentCopy(render2, copyHandler) {
   const codes = Array.from(render2.querySelectorAll("[class*=language]"));
   codes.forEach((code) => {
     const codeRender = code.querySelector(".code-render");
     const copyEl = code.querySelector(".code-copy");
-    copyEl.onclick = function() {
-      navigator.clipboard.writeText(codeRender.innerText);
-      copyHandler == null ? void 0 : copyHandler(codeRender.innerText);
-    };
+    if (copyEl) {
+      copyEl.onclick = function() {
+        navigator.clipboard.writeText((codeRender == null ? void 0 : codeRender.innerText) || "");
+        copyHandler == null ? void 0 : copyHandler((codeRender == null ? void 0 : codeRender.innerText) || "");
+      };
+    }
   });
 }
 function changeStyle(select) {
@@ -5460,6 +5462,11 @@ const MdRender = defineComponent({
       type: Boolean,
       default: false,
       required: false
+    },
+    showCodeTool: {
+      type: Boolean,
+      default: true,
+      required: false
     }
   },
   emits: ["copy"],
@@ -5471,12 +5478,15 @@ const MdRender = defineComponent({
     const {
       content,
       codeStyle,
-      raw
+      raw,
+      showCodeTool
     } = toRefs(props);
     let result = ref$1("");
     let render2 = ref$1(null);
     onMounted(() => {
-      toolResolve();
+      if (showCodeTool) {
+        toolResolve();
+      }
       nextTick(() => {
         if (raw.value && render2.value) {
           const rawMD = resolveRaw(render2.value);
@@ -5490,7 +5500,7 @@ const MdRender = defineComponent({
     });
     function toolResolve() {
       autoChangeStyle(render2.value);
-      contentCopy(content.value, render2.value, (value) => {
+      contentCopy(render2.value, (value) => {
         emit("copy", value);
       });
     }

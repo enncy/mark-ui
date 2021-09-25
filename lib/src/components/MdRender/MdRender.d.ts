@@ -17,19 +17,27 @@ export declare const MdRender: import("vue").DefineComponent<{
         default: boolean;
         required: false;
     };
+    showCodeTool: {
+        type: BooleanConstructor;
+        default: boolean;
+        required: false;
+    };
 }, () => JSX.Element, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, "copy"[], "copy", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<{
     content?: unknown;
     codeStyle?: unknown;
     raw?: unknown;
+    showCodeTool?: unknown;
 } & {
     raw: boolean;
     content: string;
     codeStyle: keyof HljsStyleTypes;
+    showCodeTool: boolean;
 } & {}> & {
     onCopy?: ((...args: any[]) => any) | undefined;
 }, {
     raw: boolean;
     content: string;
     codeStyle: keyof HljsStyleTypes;
+    showCodeTool: boolean;
 }>;
 export default MdRender;

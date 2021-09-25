@@ -146,16 +146,24 @@ export function autoChangeStyle(render: any) {
     }
 }
 
-export function contentCopy(content: string, render: any, copyHandler?: (value:string) => void) {
+/**
+ * 处理<code/>代码的悬浮窗复制工具
+ * @param render 渲染器dom对象
+ * @param copyHandler 回调函数
+ */
+export function contentCopy( render: any, copyHandler?: (value: string) => void) {
     const codes = Array.from(render.querySelectorAll('[class*=language]'))
 
     codes.forEach((code: any) => {
         const codeRender: HTMLDivElement = code.querySelector(".code-render")
         const copyEl: HTMLSpanElement = code.querySelector(".code-copy")
-        copyEl.onclick = function () {
-            navigator.clipboard.writeText(codeRender.innerText)
-            copyHandler?.(codeRender.innerText)
+        if (copyEl) {
+            copyEl.onclick = function () {
+                navigator.clipboard.writeText(codeRender?.innerText || '')
+                copyHandler?.(codeRender?.innerText || '')
+            }
         }
+
     })
 }
 

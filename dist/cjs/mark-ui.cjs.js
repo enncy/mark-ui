@@ -5425,15 +5425,17 @@ function autoChangeStyle(render2) {
     });
   }
 }
-function contentCopy(content, render2, copyHandler) {
+function contentCopy(render2, copyHandler) {
   const codes = Array.from(render2.querySelectorAll("[class*=language]"));
   codes.forEach((code) => {
     const codeRender = code.querySelector(".code-render");
     const copyEl = code.querySelector(".code-copy");
-    copyEl.onclick = function() {
-      navigator.clipboard.writeText(codeRender.innerText);
-      copyHandler == null ? void 0 : copyHandler(codeRender.innerText);
-    };
+    if (copyEl) {
+      copyEl.onclick = function() {
+        navigator.clipboard.writeText((codeRender == null ? void 0 : codeRender.innerText) || "");
+        copyHandler == null ? void 0 : copyHandler((codeRender == null ? void 0 : codeRender.innerText) || "");
+      };
+    }
   });
 }
 function changeStyle(select) {
@@ -5463,6 +5465,11 @@ const MdRender = vue.defineComponent({
       type: Boolean,
       default: false,
       required: false
+    },
+    showCodeTool: {
+      type: Boolean,
+      default: true,
+      required: false
     }
   },
   emits: ["copy"],
@@ -5474,12 +5481,15 @@ const MdRender = vue.defineComponent({
     const {
       content,
       codeStyle,
-      raw
+      raw,
+      showCodeTool
     } = vue.toRefs(props);
     let result = vue.ref("");
     let render2 = vue.ref(null);
     vue.onMounted(() => {
-      toolResolve();
+      if (showCodeTool) {
+        toolResolve();
+      }
       vue.nextTick(() => {
         if (raw.value && render2.value) {
           const rawMD = resolveRaw(render2.value);
@@ -5493,7 +5503,7 @@ const MdRender = vue.defineComponent({
     });
     function toolResolve() {
       autoChangeStyle(render2.value);
-      contentCopy(content.value, render2.value, (value) => {
+      contentCopy(render2.value, (value) => {
         emit("copy", value);
       });
     }
