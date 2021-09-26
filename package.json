@@ -52,5 +52,28 @@
     "vite-aliases": "^0.8.6",
     "vue-dts-gen": "^0.3.0",
     "vue-tsc": "^0.2.2"
-  }
+  },
+  "description": "> a simple UI design of markdown",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enncy/mark-ui.git"
+  },
+  "keywords": [
+    "markdown",
+    "ui",
+    "mark-ui",
+    "web-design",
+    "markdown-it",
+    "markdown-plugin"
+  ],
+  "author": "enncy",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/enncy/mark-ui/issues"
+  },
+  "homepage": "https://github.com/enncy/mark-ui#readme"
 }
